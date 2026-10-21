@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>过量摄取加工食品的后果｜健康值闯关</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Microsoft YaHei","Noto Sans SC",Arial,sans-serif;background:linear-gradient(135deg,#e5f9ff,#fff7d6,#efffe7);color:#263238}
+.wrap{max-width:1050px;margin:auto;padding:18px}
+.card{background:rgba(255,255,255,.96);border-radius:28px;padding:24px;box-shadow:0 10px 30px rgba(40,60,80,.14);margin-bottom:18px}
+.hero{text-align:center;padding:28px 20px}
+.hero-icon{font-size:64px}
+h1{font-size:38px;margin:8px 0;color:#f05a47}
+.subtitle{font-size:19px;color:#536274}
+.badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}
+.badge{padding:9px 14px;border-radius:999px;background:#fff1b8;font-weight:800}
+.rule{background:#fff2f2;border:2px dashed #ff8b7b;border-radius:20px;padding:16px;text-align:left;line-height:1.7}
+button{border:0;border-radius:16px;padding:13px 20px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.12);transition:.15s}
+button:hover{transform:translateY(-2px)}
+.primary{background:#f36c56;color:#fff}.green{background:#55b87a;color:#fff}.blue{background:#4d96d9;color:#fff}
+.screen{display:none}.screen.active{display:block}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.stage{background:#edf5ff;color:#3573ad;border-radius:999px;padding:8px 14px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.stat{background:#f6f8fa;border-radius:18px;padding:11px;text-align:center}
+.stat b{display:block;font-size:25px;margin-top:3px}
+.bar{height:9px;background:#e5e8ec;border-radius:20px;overflow:hidden;margin-top:7px}
+.fill{height:100%;transition:.3s}
+.health{background:#43b979}.sugar{background:#f2b134}.salt{background:#6986e8}.oil{background:#e57b55}
+.consequence{background:#f7faff;border-left:6px solid #5d9bd3;border-radius:15px;padding:13px 15px;margin:12px 0;font-weight:700}
+.foods{text-align:center;font-size:48px;margin:10px 0}
+.question{font-size:25px;font-weight:900;line-height:1.45;margin:15px 0}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.option{background:#fff;border:3px solid #e8edf2;box-shadow:none;text-align:left;min-height:68px}
+.option:hover{background:#f3fbff;border-color:#80b9e4}
+.option.correct{background:#e9fff2;border-color:#46b978}.option.wrong{background:#fff0f0;border-color:#ec6c6c}
+.feedback{display:none;margin-top:14px;padding:14px;border-radius:16px;font-weight:800;line-height:1.6}
+.feedback.show{display:block}.good{background:#e9fff2;color:#176c46}.bad{background:#fff0f0;color:#9d3838}
+.next{text-align:center;margin-top:16px}
+.result{text-align:center}.score{font-size:68px;font-weight:1000;color:#f05a47}
+.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}
+.summary div{background:#f7f9fb;border-radius:18px;padding:16px;font-size:18px}
+.small{font-size:14px;color:#6c7888}
+@media(max-width:700px){h1{font-size:29px}.stats{grid-template-columns:repeat(2,1fr)}.options,.summary{grid-template-columns:1fr}.question{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start" class="card hero screen active">
+  <div class="hero-icon">🍔🍜🥤➡️❤️</div>
+  <h1>过量摄取加工食品的后果</h1>
+  <div class="subtitle">六年级健康闯关游戏｜守护你的「身体健康值」</div>
+  <div class="badges">
+    <span class="badge">❤️ 健康值会变化</span>
+    <span class="badge">🎯 18道挑战题</span>
+    <span class="badge">🏆 满分100分</span>
+    <span class="badge">🧠 学会健康选择</span>
+  </div>
+  <div class="rule">
+    <b>🎮 游戏规则</b><br>
+    每回答一题，人物的 <b>❤️「身体健康值」</b> 都会发生变化。<br>
+    ✅ 选择正确的健康知识：<b>健康值上升</b><br>
+    ❌ 选择错误的答案：<b>健康值下降</b><br>
+    <span class="small">本游戏重点不是“不能吃”，而是认识「长期、过量摄取」超加工食品可能带来的健康风险。</span>
+  </div>
+  <br>
+  <button class="primary" id="startBtn">🚀 开始挑战</button>
+</section>
+
+<section id="game" class="card screen">
+  <div class="top">
+    <div><span class="stage" id="stage">第1关</span> <b id="stageName"></b></div>
+    <b id="counter">1 / 18</b>
+  </div>
+
+  <div class="stats">
+    <div class="stat">❤️ 身体健康值<b id="health">100</b><div class="bar"><div class="fill health" id="healthBar"></div></div></div>
+    <div class="stat">🍬 糖分风险<b id="sugar">0</b><div class="bar"><div class="fill sugar" id="sugarBar"></div></div></div>
+    <div class="stat">🧂 盐分风险<b id="salt">0</b><div class="bar"><div class="fill salt" id="saltBar"></div></div></div>
+    <div class="stat">🛢️ 油脂风险<b id="oil">0</b><div class="bar"><div class="fill oil" id="oilBar"></div></div></div>
+  </div>
+
+  <div class="consequence" id="consequence"></div>
+  <div class="foods" id="foods"></div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <div class="next"><button class="green" id="nextBtn" style="display:none">继续 ➜</button></div>
+</section>
+
+<section id="result" class="card result screen">
+  <div class="hero-icon">🏆❤️🌟</div>
+  <h1>健康挑战完成！</h1>
+  <div class="score" id="finalScore">0分</div>
+  <h2 id="rank"></h2>
+  <p id="finalText"></p>
+  <div class="summary">
+    <div>❤️ 最终身体健康值<br><b id="rHealth"></b></div>
+    <div>🍬 糖分风险<br><b id="rSugar"></b></div>
+    <div>🧂 盐分风险<br><b id="rSalt"></b></div>
+    <div>🛢️ 油脂风险<br><b id="rOil"></b></div>
+  </div>
+  <div class="rule">
+    <b>🌱 今天要记住：</b><br>
+    过量摄取超加工食品，可能增加肥胖、代谢问题、心血管疾病、肠道问题，以及部分慢性疾病的风险。<br>
+    <b>聪明的选择：多样、均衡、适量，多选择新鲜或少加工的食物。</b>
+  </div>
+  <br>
+  <button class="primary" id="againBtn">🔄 再挑战一次</button>
+  <button class="blue" id="printBtn">🖨️ 打印成绩</button>
+</section>
+</div>
+
+<script>
+const questions=[
+{stage:"第1关",name:"体重与代谢",icon:"🍔🥤⚖️",risk:"⚖️ 长期过量摄取高糖、高脂、低纤维食品，可能增加体重和代谢问题的风险。",
+q:"如果一个人经常吃高糖、高脂的超加工食品，最可能需要注意什么？",
+o:["体重和代谢健康","一定会长得更高","一定会视力变好","一定不会有影响"],a:0,e:"长期过量摄取高能量食品，可能增加肥胖、胰岛素抵抗及代谢问题的风险。"},
+{stage:"第1关",name:"第2型糖尿病风险",icon:"🍩🧃🩸",risk:"🍬 长期大量摄取含糖食品和饮料，可能增加代谢负担。",
+q:"长期大量喝含糖饮料，可能增加哪一种健康风险？",
+o:["第2型糖尿病风险","骨头一定变长","听力一定变好","不会有任何影响"],a:0,e:"长期高糖饮食模式与肥胖、胰岛素抵抗及第2型糖尿病风险增加有关。"},
+{stage:"第1关",name:"血压警报",icon:"🧂🍜❤️",risk:"🧂 部分加工食品和即食食品可能含有较多钠。",
+q:"长期摄取过多盐分，最需要注意哪一种健康问题？",
+o:["高血压风险","身高突然增加","头发变黑","记忆力一定变强"],a:0,e:"长期高盐饮食可能增加血压升高的风险。"},
+{stage:"第2关",name:"心血管健康",icon:"❤️🫀🍟",risk:"❤️ 长期不健康饮食模式可能增加心血管系统负担。",
+q:"过量摄取高盐、高脂的加工食品，可能增加什么风险？",
+o:["心血管疾病风险","一定不会生病","一定让心脏更强","一定改善血管"],a:0,e:"长期不健康饮食模式与高血压、心血管疾病等风险增加有关。"},
+{stage:"第2关",name:"血管小侦探",icon:"🫀🔎🧂",risk:"🔎 健康饮食不是只看一种营养素，而是看长期整体饮食模式。",
+q:"如果想保护心血管健康，哪一种做法比较好？",
+o:["经常大量吃快餐","多选择新鲜食物并减少高盐高脂食品","每天喝含糖饮料","只吃加工肉制品"],a:1,e:"减少长期大量摄取高盐、高脂食品，并保持均衡饮食，是较健康的生活方式。"},
+{stage:"第2关",name:"身体发炎",icon:"🔥🧍🥤",risk:"🔥 长期不健康的饮食模式可能与慢性炎症及代谢异常有关。",
+q:"为什么不能长期大量依赖超加工食品？",
+o:["可能增加身体健康风险","因为包装不好看","因为一定没有任何营养","因为吃一口就会生病"],a:0,e:"重点是“长期、过量”。一次食用并不等于马上生病，但长期饮食模式会影响健康风险。"},
+{stage:"第3关",name:"肠道健康",icon:"🦠🥦🍜",risk:"🦠 肠道需要多样化、均衡的食物和膳食纤维。",
+q:"长期大量吃超加工食品，可能对消化系统造成什么影响？",
+o:["可能出现消化和肠道功能问题","一定让肠道更强","一定改善消化","完全没有关系"],a:0,e:"高加工、低纤维的饮食模式可能不利于肠道健康；多样化的植物性食物可帮助提供膳食纤维。"},
+{stage:"第3关",name:"膳食纤维",icon:"🥬🍎🌽",risk:"🥬 新鲜蔬果和全谷类通常能提供较多膳食纤维。",
+q:"哪一种选择更有助于获得膳食纤维？",
+o:["蔬菜、水果和全谷类","汽水","糖果","薯片"],a:0,e:"蔬菜、水果、豆类和全谷类等食物是膳食纤维的重要来源。"},
+{stage:"第3关",name:"肠道小卫士",icon:"🛡️🦠🥗",risk:"🛡️ 健康的饮食结构有助于维持良好的肠道环境。",
+q:"如果想照顾肠道健康，哪一种饮食方式比较好？",
+o:["饮食多样，增加蔬果和纤维来源","只吃即食面","只喝甜饮料","每天大量吃加工肉"],a:0,e:"均衡、多样的饮食更有利于获得不同营养素和膳食纤维。"},
+{stage:"第4关",name:"癌症风险",icon:"🧬⚠️🍖",risk:"⚠️ 研究发现，较高的超加工食品摄取与多种健康风险存在关联。",
+q:"关于超加工食品与癌症，哪一个说法比较正确？",
+o:["长期高摄取与部分癌症风险增加有关","吃一次一定会得癌症","完全没有任何研究","所有癌症都由加工食品造成"],a:0,e:"研究观察到较高超加工食品摄取与部分癌症风险存在关联，但不能简单说某一种食品直接造成癌症。"},
+{stage:"第4关",name:"加工肉制品",icon:"🌭🥓🔎",risk:"🔎 香肠、火腿等属于常见加工肉制品，应注意摄取量。",
+q:"以下哪一种是常见的加工肉制品？",
+o:["苹果","鲜鱼","香肠","胡萝卜"],a:2,e:"香肠、火腿等属于加工肉制品，应作为饮食中的适量选择。"},
+{stage:"第4关",name:"不是越多越好",icon:"🍖⚖️🥗",risk:"⚖️ 健康饮食讲究均衡与适量，而不是“完全不能吃”。",
+q:"关于加工食品，哪一种说法最正确？",
+o:["完全不能吃","越多越健康","偶尔适量可以，但不应长期大量摄取","只要包装漂亮就健康"],a:2,e:"重点是减少长期大量摄取，并增加新鲜或少加工食物的比例。"},
+{stage:"第5关",name:"情绪与大脑",icon:"🧠😟🍬",risk:"🧠 饮食、生活习惯和心理健康之间可能存在复杂关系。",
+q:"长期大量摄取超加工食品，与精神健康方面的什么风险可能有关？",
+o:["焦虑、抑郁等情绪问题风险增加","一定变得更聪明","一定改善情绪","完全没有关系"],a:0,e:"部分研究观察到较高超加工食品摄取与焦虑、抑郁等精神健康问题存在关联，但这是复杂的多因素关系。"},
+{stage:"第5关",name:"学习状态",icon:"📚🧠🥗",risk:"📚 健康的饮食和生活习惯有助于维持良好的学习与生活状态。",
+q:"想保持良好的学习状态，哪一种生活方式更理想？",
+o:["只喝汽水、不吃正餐","均衡饮食、运动和充足睡眠","每天只吃零食","经常熬夜"],a:1,e:"均衡饮食、规律运动和充足睡眠，都是维持身心健康的重要习惯。"},
+{stage:"第5关",name:"认知健康",icon:"🧠🔍❤️",risk:"🧠 一些研究也在探讨高超加工食品摄取与认知健康之间的关系。",
+q:"关于超加工食品与认知健康，哪一种说法较合适？",
+o:["部分研究发现可能存在关联，应注意整体饮食","吃一包薯片就会失智","完全确定所有人都会失智","与饮食没有任何关系"],a:0,e:"相关研究仍需从整体饮食、生活方式等多方面理解，不能把单一食品直接等同于疾病。"},
+{stage:"第6关",name:"长期健康风险",icon:"📈❤️⚠️",risk:"📈 研究显示，较高的超加工食品摄取与一些慢性疾病和死亡风险存在关联。",
+q:"为什么我们要避免长期大量摄取超加工食品？",
+o:["因为可能增加多种慢性疾病风险","因为吃一次就会生病","因为所有加工食品都有毒","因为完全不能吃"],a:0,e:"较高摄取与多种健康风险有关，因此更重要的是减少长期大量摄取，保持均衡饮食。"},
+{stage:"第6关",name:"健康选择",icon:"🥦🍎💧",risk:"🌱 最简单的方向：多样、均衡、适量。",
+q:"以下哪一种做法最有助于降低长期饮食风险？",
+o:["多吃蔬果和少加工食物，减少高糖高盐高脂食品","天天喝含糖饮料","天天吃快餐","只吃加工肉制品"],a:0,e:"增加新鲜或少加工食物，同时减少高糖、高盐、高脂的超加工食品，是更健康的饮食方向。"},
+{stage:"第6关",name:"终极挑战",icon:"❤️🏆🥗",risk:"❤️ 最后一关：把今天学到的知识带回生活中。",
+q:"如果你要告诉同学一句话，哪一句最正确？",
+o:["超加工食品越多越好","加工食品一口都不能吃","长期过量摄取可能增加健康风险，要学会均衡、适量选择","只要好吃就可以天天吃"],a:2,e:"最重要的不是恐惧某一种食物，而是认识风险、控制摄取量，并建立均衡健康的饮食习惯。"}
+];
+
+let i=0,score=0,health=100,sugar=0,salt=0,oil=0,locked=false;
+
+const $=id=>document.getElementById(id);
+function start(){
+ i=0;score=0;health=100;sugar=0;salt=0;oil=0;
+ $("start").classList.remove("active");$("result").classList.remove("active");$("game").classList.add("active");
+ render();
+}
+function render(){
+ const q=questions[i];
+ $("stage").textContent=q.stage;$("stageName").textContent="｜"+q.name;
+ $("counter").textContent=(i+1)+" / "+questions.length;
+ $("consequence").textContent=q.risk;$("foods").textContent=q.icon;$("question").textContent=q.q;
+ const box=$("options");box.innerHTML="";
+ q.o.forEach((text,n)=>{
+   const b=document.createElement("button");b.className="option";b.type="button";
+   b.textContent=String.fromCharCode(65+n)+"．"+text;
+   b.addEventListener("click",()=>answer(n,b));box.appendChild(b);
+ });
+ $("feedback").className="feedback";$("feedback").textContent="";
+ $("nextBtn").style.display="none";locked=false;update();
+}
+function answer(n,btn){
+ if(locked)return;locked=true;
+ const q=questions[i],bs=[...document.querySelectorAll(".option")];
+ bs.forEach(b=>b.disabled=true);bs[q.a].classList.add("correct");
+ const f=$("feedback");
+ if(n===q.a){
+   btn.classList.add("correct");score+=Math.round(100/questions.length);
+   health=Math.min(100,health+4);
+   f.className="feedback show good";
+   f.innerHTML="✅ 答对了！ ❤️ 身体健康值 <b>+4</b><br><span class='small'>"+q.e+"</span>";
+ }else{
+   btn.classList.add("wrong");health=Math.max(0,health-10);
+   if(n===1||n===3)sugar=Math.min(100,sugar+7);
+   if(n===2)salt=Math.min(100,salt+7);
+   if(n===3)oil=Math.min(100,oil+7);
+   f.className="feedback show bad";
+   f.innerHTML="❌ 答错了！ ❤️ 身体健康值 <b>-10</b><br><span class='small'>"+q.e+"</span>";
+ }
+ update();$("nextBtn").style.display="inline-block";
+}
+function update(){
+ $("health").textContent=health;$("sugar").textContent=sugar;$("salt").textContent=salt;$("oil").textContent=oil;
+ $("healthBar").style.width=health+"%";$("sugarBar").style.width=sugar+"%";$("saltBar").style.width=salt+"%";$("oilBar").style.width=oil+"%";
+}
+function next(){
+ if(i<questions.length-1){i++;render()}else finish();
+}
+function finish(){
+ $("game").classList.remove("active");$("result").classList.add("active");
+ score=Math.min(100,score);
+ $("finalScore").textContent=score+"分";
+ let rank,text;
+ if(health>=90){rank="🌟 S级｜超级健康小卫士";text="你的身体健康值守得很好！你已经掌握“过量摄取加工食品会带来哪些后果”。"}
+ else if(health>=75){rank="🏆 A级｜健康小卫士";text="表现很好！继续留意糖、盐、油，以及食品的加工程度。"}
+ else if(health>=55){rank="👍 B级｜健康学习员";text="不错！再复习一次各种健康后果，你会越来越厉害。"}
+ else{rank="💪 C级｜健康挑战者";text="别灰心！重新挑战，看看能不能把身体健康值救回来！"}
+ $("rank").textContent=rank;$("finalText").textContent=text;
+ $("rHealth").textContent=health+"/100";$("rSugar").textContent=sugar+"（越低越好）";$("rSalt").textContent=salt+"（越低越好）";$("rOil").textContent=oil+"（越低越好）";
+}
+$("startBtn").addEventListener("click",start);
+$("nextBtn").addEventListener("click",next);
+$("againBtn").addEventListener("click",()=>{ $("result").classList.remove("active");$("start").classList.add("active"); });
+$("printBtn").addEventListener("click",()=>window.print());
+</script>
+</body>
+</html>
